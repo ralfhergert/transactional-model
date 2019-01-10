@@ -22,70 +22,79 @@ public class PropertyHolderFactoryTest {
 	public void testCreatePropertyHolderForPrimitiveBoolean() {
 		PropertyHolder propertyHolder = PropertyHolderFactory.createPropertyFor("foo", boolean.class);
 		Assert.assertNotNull("propertyHolder should not be null", propertyHolder);
+		Assert.assertEquals("propertyHolder should be", NonNullValuePropertyHolder.class, propertyHolder.getClass());
 		Assert.assertEquals("property name should be", "foo", propertyHolder.getPropertyName());
-		Assert.assertEquals("default value should be", false, propertyHolder.getValue());
+		Assert.assertEquals("default value should be", false, ((ValuePropertyHolder)propertyHolder).getValue());
 	}
 
 	@Test
 	public void testCreatePropertyHolderForPrimitiveByte() {
 		PropertyHolder propertyHolder = PropertyHolderFactory.createPropertyFor("foo", byte.class);
 		Assert.assertNotNull("propertyHolder should not be null", propertyHolder);
+		Assert.assertEquals("propertyHolder should be", NonNullValuePropertyHolder.class, propertyHolder.getClass());
 		Assert.assertEquals("property name should be", "foo", propertyHolder.getPropertyName());
-		Assert.assertEquals("default value should be", (byte)0, propertyHolder.getValue());
+		Assert.assertEquals("default value should be", (byte)0, ((ValuePropertyHolder)propertyHolder).getValue());
 	}
 
 	@Test
 	public void testCreatePropertyHolderForPrimitiveChar() {
 		PropertyHolder propertyHolder = PropertyHolderFactory.createPropertyFor("foo", char.class);
 		Assert.assertNotNull("propertyHolder should not be null", propertyHolder);
+		Assert.assertEquals("propertyHolder should be", NonNullValuePropertyHolder.class, propertyHolder.getClass());
 		Assert.assertEquals("property name should be", "foo", propertyHolder.getPropertyName());
-		Assert.assertEquals("default value should be", (char)0, propertyHolder.getValue());
+		Assert.assertEquals("default value should be", (char)0, ((ValuePropertyHolder)propertyHolder).getValue());
 	}
 
 	@Test
 	public void testCreatePropertyHolderForPrimitiveDouble() {
 		PropertyHolder propertyHolder = PropertyHolderFactory.createPropertyFor("foo", double.class);
 		Assert.assertNotNull("propertyHolder should not be null", propertyHolder);
+		Assert.assertEquals("propertyHolder should be", NonNullValuePropertyHolder.class, propertyHolder.getClass());
 		Assert.assertEquals("property name should be", "foo", propertyHolder.getPropertyName());
-		Assert.assertEquals("default value should be", 0d, propertyHolder.getValue());
+		Assert.assertEquals("default value should be", 0d, ((ValuePropertyHolder)propertyHolder).getValue());
 	}
 
 	@Test
 	public void testCreatePropertyHolderForPrimitiveFloat() {
 		PropertyHolder propertyHolder = PropertyHolderFactory.createPropertyFor("foo", float.class);
 		Assert.assertNotNull("propertyHolder should not be null", propertyHolder);
+		Assert.assertEquals("propertyHolder should be", NonNullValuePropertyHolder.class, propertyHolder.getClass());
 		Assert.assertEquals("property name should be", "foo", propertyHolder.getPropertyName());
-		Assert.assertEquals("default value should be", 0f, propertyHolder.getValue());
+		Assert.assertEquals("default value should be", 0f, ((ValuePropertyHolder)propertyHolder).getValue());
 	}
 
 	@Test
 	public void testCreatePropertyHolderForPrimitiveInt() {
 		PropertyHolder propertyHolder = PropertyHolderFactory.createPropertyFor("foo", int.class);
 		Assert.assertNotNull("propertyHolder should not be null", propertyHolder);
+		Assert.assertEquals("propertyHolder should be", NonNullValuePropertyHolder.class, propertyHolder.getClass());
 		Assert.assertEquals("property name should be", "foo", propertyHolder.getPropertyName());
-		Assert.assertEquals("default value should be", 0, propertyHolder.getValue());
+		Assert.assertEquals("default value should be", 0, ((ValuePropertyHolder)propertyHolder).getValue());
 	}
 
 	@Test
 	public void testCreatePropertyHolderForPrimitiveLong() {
 		PropertyHolder propertyHolder = PropertyHolderFactory.createPropertyFor("foo", long.class);
 		Assert.assertNotNull("propertyHolder should not be null", propertyHolder);
+		Assert.assertEquals("propertyHolder should be", NonNullValuePropertyHolder.class, propertyHolder.getClass());
 		Assert.assertEquals("property name should be", "foo", propertyHolder.getPropertyName());
-		Assert.assertEquals("default value should be", 0L, propertyHolder.getValue());
+		Assert.assertEquals("default value should be", 0L, ((ValuePropertyHolder)propertyHolder).getValue());
 	}
 
 	@Test
 	public void testCreatePropertyHolderForPrimitiveShort() {
 		PropertyHolder propertyHolder = PropertyHolderFactory.createPropertyFor("foo", short.class);
 		Assert.assertNotNull("propertyHolder should not be null", propertyHolder);
+		Assert.assertEquals("propertyHolder should be", NonNullValuePropertyHolder.class, propertyHolder.getClass());
 		Assert.assertEquals("property name should be", "foo", propertyHolder.getPropertyName());
-		Assert.assertEquals("default value should be", (short)0, propertyHolder.getValue());
+		Assert.assertEquals("default value should be", (short)0, ((ValuePropertyHolder)propertyHolder).getValue());
 	}
 
 	@Test
 	public void testCreatePropertyHolderForBoolean() {
 		PropertyHolder propertyHolder = PropertyHolderFactory.createPropertyFor("foo", Boolean.class);
 		Assert.assertNotNull("propertyHolder should not be null", propertyHolder);
+		Assert.assertEquals("propertyHolder should be", ValuePropertyHolder.class, propertyHolder.getClass());
 		Assert.assertEquals("property name should be", "foo", propertyHolder.getPropertyName());
 	}
 
@@ -93,6 +102,7 @@ public class PropertyHolderFactoryTest {
 	public void testCreatePropertyHolderForByte() {
 		PropertyHolder propertyHolder = PropertyHolderFactory.createPropertyFor("foo", Byte.class);
 		Assert.assertNotNull("propertyHolder should not be null", propertyHolder);
+		Assert.assertEquals("propertyHolder should be", ValuePropertyHolder.class, propertyHolder.getClass());
 		Assert.assertEquals("property name should be", "foo", propertyHolder.getPropertyName());
 	}
 
@@ -100,6 +110,7 @@ public class PropertyHolderFactoryTest {
 	public void testCreatePropertyHolderForCharacter() {
 		PropertyHolder propertyHolder = PropertyHolderFactory.createPropertyFor("foo", Character.class);
 		Assert.assertNotNull("propertyHolder should not be null", propertyHolder);
+		Assert.assertEquals("propertyHolder should be", ValuePropertyHolder.class, propertyHolder.getClass());
 		Assert.assertEquals("property name should be", "foo", propertyHolder.getPropertyName());
 	}
 
@@ -107,6 +118,7 @@ public class PropertyHolderFactoryTest {
 	public void testCreatePropertyHolderForDouble() {
 		PropertyHolder propertyHolder = PropertyHolderFactory.createPropertyFor("foo", Double.class);
 		Assert.assertNotNull("propertyHolder should not be null", propertyHolder);
+		Assert.assertEquals("propertyHolder should be", ValuePropertyHolder.class, propertyHolder.getClass());
 		Assert.assertEquals("property name should be", "foo", propertyHolder.getPropertyName());
 	}
 
@@ -114,6 +126,7 @@ public class PropertyHolderFactoryTest {
 	public void testCreatePropertyHolderForFloat() {
 		PropertyHolder propertyHolder = PropertyHolderFactory.createPropertyFor("foo", Float.class);
 		Assert.assertNotNull("propertyHolder should not be null", propertyHolder);
+		Assert.assertEquals("propertyHolder should be", ValuePropertyHolder.class, propertyHolder.getClass());
 		Assert.assertEquals("property name should be", "foo", propertyHolder.getPropertyName());
 	}
 
@@ -121,6 +134,7 @@ public class PropertyHolderFactoryTest {
 	public void testCreatePropertyHolderForInteger() {
 		PropertyHolder propertyHolder = PropertyHolderFactory.createPropertyFor("foo", Integer.class);
 		Assert.assertNotNull("propertyHolder should not be null", propertyHolder);
+		Assert.assertEquals("propertyHolder should be", ValuePropertyHolder.class, propertyHolder.getClass());
 		Assert.assertEquals("property name should be", "foo", propertyHolder.getPropertyName());
 	}
 
@@ -128,6 +142,7 @@ public class PropertyHolderFactoryTest {
 	public void testCreatePropertyHolderForLong() {
 		PropertyHolder propertyHolder = PropertyHolderFactory.createPropertyFor("foo", Long.class);
 		Assert.assertNotNull("propertyHolder should not be null", propertyHolder);
+		Assert.assertEquals("propertyHolder should be", ValuePropertyHolder.class, propertyHolder.getClass());
 		Assert.assertEquals("property name should be", "foo", propertyHolder.getPropertyName());
 	}
 
@@ -135,6 +150,7 @@ public class PropertyHolderFactoryTest {
 	public void testCreatePropertyHolderForShort() {
 		PropertyHolder propertyHolder = PropertyHolderFactory.createPropertyFor("foo", Short.class);
 		Assert.assertNotNull("propertyHolder should not be null", propertyHolder);
+		Assert.assertEquals("propertyHolder should be", ValuePropertyHolder.class, propertyHolder.getClass());
 		Assert.assertEquals("property name should be", "foo", propertyHolder.getPropertyName());
 	}
 
@@ -142,6 +158,7 @@ public class PropertyHolderFactoryTest {
 	public void testCreatePropertyHolderForString() {
 		PropertyHolder propertyHolder = PropertyHolderFactory.createPropertyFor("foo", String.class);
 		Assert.assertNotNull("propertyHolder should not be null", propertyHolder);
+		Assert.assertEquals("propertyHolder should be", ValuePropertyHolder.class, propertyHolder.getClass());
 		Assert.assertEquals("property name should be", "foo", propertyHolder.getPropertyName());
 	}
 }

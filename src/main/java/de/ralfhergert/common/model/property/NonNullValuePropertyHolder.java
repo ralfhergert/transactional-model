@@ -2,9 +2,9 @@ package de.ralfhergert.common.model.property;
 
 import de.ralfhergert.common.model.context.Context;
 
-public class NonNullPropertyHolder<Type> extends PropertyHolder<Type> {
+public class NonNullValuePropertyHolder<Type> extends ValuePropertyHolder<Type> {
 
-	public NonNullPropertyHolder(String propertyName, Type initValue) {
+	public NonNullValuePropertyHolder(String propertyName, Type initValue) {
 		super(propertyName, initValue);
 		if (initValue == null) {
 			throw new IllegalArgumentException("initValue must not be null");

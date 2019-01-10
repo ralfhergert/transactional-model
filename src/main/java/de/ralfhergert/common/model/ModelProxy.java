@@ -6,6 +6,7 @@ import de.ralfhergert.common.model.event.ModelChangeEvent;
 import de.ralfhergert.common.model.event.ModelChangeEventListener;
 import de.ralfhergert.common.model.meta.MethodInfo;
 import de.ralfhergert.common.model.property.PropertyHolder;
+import de.ralfhergert.common.model.property.ValuePropertyHolder;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -70,11 +71,12 @@ public class ModelProxy implements Model, InvocationHandler {
 		}
 		if (methodPropertyLookupMap.containsKey(method)) {
 			final MethodInfo methodInfo = methodPropertyLookupMap.get(method);
-			if (methodInfo.getMethodType() == MethodInfo.MethodType.SETTER) {
-				properties.get(methodInfo.getPropertyName()).setValue(args[0], getContext());
+			final PropertyHolder propertyHolder = properties.get(methodInfo.getPropertyName());
+			if (methodInfo.getMethodType() == MethodInfo.MethodType.SETTER && propertyHolder instanceof ValuePropertyHolder) {
+				((ValuePropertyHolder)propertyHolder).setValue(args[0], getContext());
 				return null;
-			} else if (methodInfo.getMethodType() == MethodInfo.MethodType.GETTER) {
-				return properties.get(methodInfo.getPropertyName()).getValue();
+			} else if (methodInfo.getMethodType() == MethodInfo.MethodType.GETTER && propertyHolder instanceof ValuePropertyHolder) {
+				return ((ValuePropertyHolder)propertyHolder).getValue();
 			}
 		}
 		throw new IllegalArgumentException("method '" + method + "' could not be invoked");
