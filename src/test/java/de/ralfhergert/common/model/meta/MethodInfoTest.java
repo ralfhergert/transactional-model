@@ -129,4 +129,100 @@ public class MethodInfoTest {
 		// test
 		MethodInfo.analyze(A.class.getMethod("getFoo"));
 	}
+
+	@Test
+	public void testPublicPrimitiveBooleanIsGetterMethodIsDetected() throws NoSuchMethodException {
+		class A {
+			public boolean isEnabled() { return false; }
+		}
+
+		// test
+		final MethodInfo info = MethodInfo.analyze(A.class.getMethod("isEnabled"));
+
+		// verify
+		Assert.assertNotNull("method info should not be null", info);
+		Assert.assertNotNull("method should not be null", info.getMethod());
+		Assert.assertEquals("method type should be", MethodInfo.MethodType.GETTER, info.getMethodType());
+		Assert.assertEquals("propertyName should be", "isEnabled", info.getPropertyName());
+		PropertyHolder propertyHolder = info.createPropertyHolder();
+		Assert.assertNotNull("propertyHolder should not be null", propertyHolder);
+		Assert.assertEquals("propertyHolder's propertyName should be", "isEnabled", propertyHolder.getPropertyName());
+	}
+
+	@Test
+	public void testPublicPrimitiveBooleanHasGetterMethodIsDetected() throws NoSuchMethodException {
+		class A {
+			public boolean hasAttachments() { return false; }
+		}
+
+		// test
+		final MethodInfo info = MethodInfo.analyze(A.class.getMethod("hasAttachments"));
+
+		// verify
+		Assert.assertNotNull("method info should not be null", info);
+		Assert.assertNotNull("method should not be null", info.getMethod());
+		Assert.assertEquals("method type should be", MethodInfo.MethodType.GETTER, info.getMethodType());
+		Assert.assertEquals("propertyName should be", "hasAttachments", info.getPropertyName());
+		PropertyHolder propertyHolder = info.createPropertyHolder();
+		Assert.assertNotNull("propertyHolder should not be null", propertyHolder);
+		Assert.assertEquals("propertyHolder's propertyName should be", "hasAttachments", propertyHolder.getPropertyName());
+	}
+
+	@Test
+	public void testPublicBooleanGetterMethodIsDetected() throws NoSuchMethodException {
+		class A {
+			public Boolean isEnabled() { return null; }
+		}
+
+		// test
+		final MethodInfo info = MethodInfo.analyze(A.class.getMethod("isEnabled"));
+
+		// verify
+		Assert.assertNotNull("method info should not be null", info);
+		Assert.assertNotNull("method should not be null", info.getMethod());
+		Assert.assertEquals("method type should be", MethodInfo.MethodType.GETTER, info.getMethodType());
+		Assert.assertEquals("propertyName should be", "isEnabled", info.getPropertyName());
+		PropertyHolder propertyHolder = info.createPropertyHolder();
+		Assert.assertNotNull("propertyHolder should not be null", propertyHolder);
+		Assert.assertEquals("propertyHolder's propertyName should be", "isEnabled", propertyHolder.getPropertyName());
+	}
+
+	@Test
+	public void testPublicVoidHasGetterMethodIsRejected() throws NoSuchMethodException {
+		thrown.expect(IllegalArgumentException.class);
+		thrown.expectMessage("hasAttachments() looks like a getter for property hasAttachments but has void as return type.");
+
+		class A {
+			public void hasAttachments() {}
+		}
+
+		// test
+		MethodInfo.analyze(A.class.getMethod("hasAttachments"));
+	}
+
+	@Test
+	public void testPublicBooleanHasGetterMethodWithParametersIsRejected() throws NoSuchMethodException {
+		thrown.expect(IllegalArgumentException.class);
+		thrown.expectMessage("hasAttachments(int) looks like a getter for property hasAttachments but accepts parameters.");
+
+		class A {
+			public Boolean hasAttachments(int value) { return Boolean.TRUE; }
+		}
+
+		// test
+		MethodInfo.analyze(A.class.getMethod("hasAttachments", int.class));
+	}
+
+	@Test
+	public void testPublicNonBooleanIsGetterMethodIsRejected() throws NoSuchMethodException {
+		thrown.expect(IllegalArgumentException.class);
+		thrown.expectMessage("isValid() looks like a getter for a boolean property isValid but has a non-boolean return type.");
+
+		class A {
+			public int isValid() { return 0; }
+		}
+
+		// test
+		MethodInfo.analyze(A.class.getMethod("isValid"));
+	}
 }

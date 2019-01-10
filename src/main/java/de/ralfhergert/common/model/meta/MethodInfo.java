@@ -23,6 +23,8 @@ public class MethodInfo {
 	// patterns for method names regarding https://docs.oracle.com/javase/specs/jls/se7/html/jls-3.html#jls-3.8
 	private static final Pattern SETTER_PATTERN = Pattern.compile("set([A-Z][a-zA-Z_0-9$]*)");
 	private static final Pattern GETTER_PATTERN = Pattern.compile("get([A-Z][a-zA-Z_0-9$]*)");
+	private static final Pattern BOOLEAN_IS_GETTER_PATTERN = Pattern.compile("is([A-Z][a-zA-Z_0-9$]*)");
+	private static final Pattern BOOLEAN_HAS_GETTER_PATTERN = Pattern.compile("has([A-Z][a-zA-Z_0-9$]*)");
 
 	private final Method method;
 	private final MethodType methodType;
@@ -72,6 +74,30 @@ public class MethodInfo {
 				throw new IllegalArgumentException("method " + method + " looks like a getter " +
 					"for property " + propertyName + " but accepts parameters. " +
 					"Getter methods are not expected to take parameters. " +
+					"Annotate this method with " + Ignore.class + " to let it ignore by this framework.");
+			}
+			return new MethodInfo(method, MethodType.GETTER, propertyName, () ->
+				PropertyHolderFactory.createPropertyFor(propertyName, method.getGenericReturnType()));
+		}
+		// the matcher assignments in the conditional are on purpose.
+		if ((matcher = BOOLEAN_IS_GETTER_PATTERN.matcher(methodName)).matches() || (matcher = BOOLEAN_HAS_GETTER_PATTERN.matcher(methodName)).matches()) {
+			final String propertyName = matcher.group(0);
+			if (void.class.equals(method.getReturnType())) {
+				throw new IllegalArgumentException("method " + method + " looks like a getter " +
+					"for property " + propertyName + " but has void as return type. " +
+					"Getter methods are expected to have a non-void return type. " +
+					"Annotate this method with " + Ignore.class + " to let it ignore by this framework.");
+			}
+			if (method.getParameterCount() != 0) {
+				throw new IllegalArgumentException("method " + method + " looks like a getter " +
+					"for property " + propertyName + " but accepts parameters. " +
+					"Getter methods are not expected to take parameters. " +
+					"Annotate this method with " + Ignore.class + " to let it ignore by this framework.");
+			}
+			if (!(Boolean.class.equals(method.getReturnType()) || boolean.class.equals(method.getReturnType()))) {
+				throw new IllegalArgumentException("method " + method + " looks like a getter " +
+					"for a boolean property " + propertyName + " but has a non-boolean return type. " +
+					"Boolean getter methods are expected to return a boolean. " +
 					"Annotate this method with " + Ignore.class + " to let it ignore by this framework.");
 			}
 			return new MethodInfo(method, MethodType.GETTER, propertyName, () ->
