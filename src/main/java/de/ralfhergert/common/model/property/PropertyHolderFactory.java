@@ -1,5 +1,8 @@
 package de.ralfhergert.common.model.property;
 
+import java.lang.reflect.ParameterizedType;
+import java.util.List;
+
 public class PropertyHolderFactory {
 
 	private PropertyHolderFactory() { /* no need to instantiate */ }
@@ -27,6 +30,8 @@ public class PropertyHolderFactory {
 			return new NonNullValuePropertyHolder<>(propertyName, 0);
 		} else if (short.class.equals(typeClass)) {
 			return new NonNullValuePropertyHolder<>(propertyName, (short)0);
+		} else if (typeClass instanceof ParameterizedType && List.class.equals(((ParameterizedType)typeClass).getRawType())) {
+			return new ListPropertyHolder<>(propertyName);
 		} else {
 			return new ValuePropertyHolder<>(propertyName);
 		}

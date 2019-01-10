@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public class ValuePropertyHolder<Value> extends PropertyHolder {
 
-	private Value value;
+	protected Value value;
 
 	public ValuePropertyHolder(String propertyName) {
 		this(propertyName, null);

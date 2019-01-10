@@ -5,6 +5,7 @@ import de.ralfhergert.common.model.context.Context;
 import de.ralfhergert.common.model.event.ModelChangeEvent;
 import de.ralfhergert.common.model.event.ModelChangeEventListener;
 import de.ralfhergert.common.model.meta.MethodInfo;
+import de.ralfhergert.common.model.property.ListPropertyHolder;
 import de.ralfhergert.common.model.property.PropertyHolder;
 import de.ralfhergert.common.model.property.ValuePropertyHolder;
 
@@ -54,6 +55,9 @@ public class ModelProxy implements Model, InvocationHandler {
 
 			final String propertyName = methodInfo.getPropertyName();
 			final PropertyHolder propertyHolder = methodInfo.createPropertyHolder();
+			if (propertyHolder == null) {
+				continue;
+			}
 			if (properties.containsKey(propertyName)) {
 				if (!properties.get(propertyName).equals(propertyHolder)) {
 					throw new IllegalArgumentException("type mismatch on property named '" + propertyName + "' detected on method '" + method.getName() + "'");
@@ -77,6 +81,10 @@ public class ModelProxy implements Model, InvocationHandler {
 				return null;
 			} else if (methodInfo.getMethodType() == MethodInfo.MethodType.GETTER && propertyHolder instanceof ValuePropertyHolder) {
 				return ((ValuePropertyHolder)propertyHolder).getValue();
+			} else if (methodInfo.getMethodType() == MethodInfo.MethodType.ADD && propertyHolder instanceof ListPropertyHolder) {
+				return ((ListPropertyHolder)propertyHolder).addElement(args[0], getContext());
+			} else if (methodInfo.getMethodType() == MethodInfo.MethodType.REMOVE && propertyHolder instanceof ListPropertyHolder) {
+				return ((ListPropertyHolder)propertyHolder).removeElement(args[0], getContext());
 			}
 		}
 		throw new IllegalArgumentException("method '" + method + "' could not be invoked");
