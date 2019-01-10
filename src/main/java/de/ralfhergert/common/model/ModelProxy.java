@@ -45,7 +45,10 @@ public class ModelProxy implements Model, InvocationHandler {
 			if (supportedDelegationMethods.contains(method)) {
 				continue;
 			}
-			final MethodInfo methodInfo = new MethodInfo(method);
+			final MethodInfo methodInfo = MethodInfo.analyze(method);
+			if (methodInfo == null || methodInfo.getMethodType() == MethodInfo.MethodType.IGNORED) {
+				continue;
+			}
 			methodPropertyLookupMap.put(method, methodInfo);
 
 			final String propertyName = methodInfo.getPropertyName();
