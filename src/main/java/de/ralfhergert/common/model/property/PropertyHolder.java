@@ -10,6 +10,9 @@ public class PropertyHolder {
 		if (propertyName == null) {
 			throw new IllegalArgumentException("propertyName must not be null");
 		}
+		if (propertyName.isEmpty()) {
+			throw new IllegalArgumentException("propertyName must not be empty");
+		}
 		this.propertyName = propertyName;
 	}
 
