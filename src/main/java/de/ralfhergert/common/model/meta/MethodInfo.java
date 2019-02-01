@@ -1,11 +1,9 @@
 package de.ralfhergert.common.model.meta;
 
 import de.ralfhergert.common.model.Ignore;
-import de.ralfhergert.common.model.property.PropertyHolder;
-import de.ralfhergert.common.model.property.PropertyHolderFactory;
 
 import java.lang.reflect.Method;
-import java.util.function.Supplier;
+import java.lang.reflect.Type;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,13 +31,13 @@ public class MethodInfo {
 	private final Method method;
 	private final MethodType methodType;
 	private final String propertyName;
-	private final Supplier<PropertyHolder> propertyHolderSupplier;
+	private final Type propertyType;
 
-	private MethodInfo(Method method, MethodType methodType, String propertyName, Supplier<PropertyHolder> propertyHolderSupplier) {
+	private MethodInfo(Method method, MethodType methodType, String propertyName, Type propertyType) {
 		this.method = method;
 		this.methodType = methodType;
 		this.propertyName = propertyName;
-		this.propertyHolderSupplier = propertyHolderSupplier;
+		this.propertyType = propertyType;
 	}
 
 	public static MethodInfo analyze(final Method method) {
@@ -67,15 +65,13 @@ public class MethodInfo {
 					"Getter methods are not expected to take parameters. " +
 					"Annotate this method with " + Ignore.class + " to let it ignore by this framework.");
 			}
-			return new MethodInfo(method, MethodType.GETTER, propertyName, () ->
-				PropertyHolderFactory.createPropertyFor(propertyName, method.getGenericReturnType()));
+			return new MethodInfo(method, MethodType.GETTER, propertyName, method.getGenericReturnType());
 		}
 		matcher = SETTER_PATTERN.matcher(methodName);
 		if (matcher.matches()) {
 			final String propertyName = matcher.group(1).substring(0, 1).toLowerCase() + matcher.group(1).substring(1);
 			if (method.getParameterCount() == 1) {
-				return new MethodInfo(method, MethodType.SETTER, propertyName, () ->
-					PropertyHolderFactory.createPropertyFor(propertyName, method.getGenericParameterTypes()[0]));
+				return new MethodInfo(method, MethodType.SETTER, propertyName, method.getGenericParameterTypes()[0]);
 			} else {
 				throw new IllegalArgumentException("method " + method + " looks like a setter " +
 					"for property " + propertyName + " but has a parameter count of " + method.getParameterCount() +
@@ -104,14 +100,13 @@ public class MethodInfo {
 					"Boolean getter methods are expected to return a boolean. " +
 					"Annotate this method with " + Ignore.class + " to let it ignore by this framework.");
 			}
-			return new MethodInfo(method, MethodType.GETTER, propertyName, () ->
-				PropertyHolderFactory.createPropertyFor(propertyName, method.getGenericReturnType()));
+			return new MethodInfo(method, MethodType.GETTER, propertyName, method.getGenericReturnType());
 		}
 		matcher = ADD_PATTERN.matcher(methodName);
 		if (matcher.matches()) {
 			final String propertyName = matcher.group(1).substring(0, 1).toLowerCase() + matcher.group(1).substring(1) + "s";
 			if (method.getParameterCount() == 1) {
-				return new MethodInfo(method, MethodType.ADD, propertyName, () -> null);
+				return new MethodInfo(method, MethodType.ADD, propertyName, null);
 			} else {
 				throw new IllegalArgumentException("method " + method + " looks like a add method " +
 					"for property " + propertyName + " but has a parameter count of " + method.getParameterCount() +
@@ -123,7 +118,7 @@ public class MethodInfo {
 		if (matcher.matches()) {
 			final String propertyName = matcher.group(1).substring(0, 1).toLowerCase() + matcher.group(1).substring(1) + "s";
 			if (method.getParameterCount() == 1) {
-				return new MethodInfo(method, MethodType.REMOVE, propertyName, () -> null);
+				return new MethodInfo(method, MethodType.REMOVE, propertyName, null);
 			} else {
 				throw new IllegalArgumentException("method " + method + " looks like a remove method " +
 					"for property " + propertyName + " but has a parameter count of " + method.getParameterCount() +
@@ -146,7 +141,7 @@ public class MethodInfo {
 		return propertyName;
 	}
 
-	public PropertyHolder createPropertyHolder() {
-		return propertyHolderSupplier.get();
+	public Type getPropertyType() {
+		return propertyType;
 	}
 }

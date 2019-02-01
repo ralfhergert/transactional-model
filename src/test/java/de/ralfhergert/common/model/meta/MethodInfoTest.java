@@ -1,7 +1,6 @@
 package de.ralfhergert.common.model.meta;
 
 import de.ralfhergert.common.model.Ignore;
-import de.ralfhergert.common.model.property.PropertyHolder;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -65,9 +64,7 @@ public class MethodInfoTest {
 		Assert.assertNotNull("method should not be null", info.getMethod());
 		Assert.assertEquals("method type should be", MethodInfo.MethodType.SETTER, info.getMethodType());
 		Assert.assertEquals("propertyName should be", "fooBar", info.getPropertyName());
-		PropertyHolder propertyHolder = info.createPropertyHolder();
-		Assert.assertNotNull("propertyHolder should not be null", propertyHolder);
-		Assert.assertEquals("propertyHolder's propertyName should be", "fooBar", propertyHolder.getPropertyName());
+		Assert.assertEquals("propertyType should be", Integer.TYPE, info.getPropertyType());
 	}
 
 
@@ -99,9 +96,7 @@ public class MethodInfoTest {
 		Assert.assertNotNull("method should not be null", info.getMethod());
 		Assert.assertEquals("method type should be", MethodInfo.MethodType.GETTER, info.getMethodType());
 		Assert.assertEquals("propertyName should be", "fooBar", info.getPropertyName());
-		PropertyHolder propertyHolder = info.createPropertyHolder();
-		Assert.assertNotNull("propertyHolder should not be null", propertyHolder);
-		Assert.assertEquals("propertyHolder's propertyName should be", "fooBar", propertyHolder.getPropertyName());
+		Assert.assertEquals("propertyType should be", Integer.TYPE, info.getPropertyType());
 	}
 
 	@Test
@@ -144,9 +139,7 @@ public class MethodInfoTest {
 		Assert.assertNotNull("method should not be null", info.getMethod());
 		Assert.assertEquals("method type should be", MethodInfo.MethodType.GETTER, info.getMethodType());
 		Assert.assertEquals("propertyName should be", "isEnabled", info.getPropertyName());
-		PropertyHolder propertyHolder = info.createPropertyHolder();
-		Assert.assertNotNull("propertyHolder should not be null", propertyHolder);
-		Assert.assertEquals("propertyHolder's propertyName should be", "isEnabled", propertyHolder.getPropertyName());
+		Assert.assertEquals("propertyType should be", Boolean.TYPE, info.getPropertyType());
 	}
 
 	@Test
@@ -163,9 +156,7 @@ public class MethodInfoTest {
 		Assert.assertNotNull("method should not be null", info.getMethod());
 		Assert.assertEquals("method type should be", MethodInfo.MethodType.GETTER, info.getMethodType());
 		Assert.assertEquals("propertyName should be", "hasAttachments", info.getPropertyName());
-		PropertyHolder propertyHolder = info.createPropertyHolder();
-		Assert.assertNotNull("propertyHolder should not be null", propertyHolder);
-		Assert.assertEquals("propertyHolder's propertyName should be", "hasAttachments", propertyHolder.getPropertyName());
+		Assert.assertEquals("propertyType should be", Boolean.TYPE, info.getPropertyType());
 	}
 
 	@Test
@@ -182,9 +173,7 @@ public class MethodInfoTest {
 		Assert.assertNotNull("method should not be null", info.getMethod());
 		Assert.assertEquals("method type should be", MethodInfo.MethodType.GETTER, info.getMethodType());
 		Assert.assertEquals("propertyName should be", "isEnabled", info.getPropertyName());
-		PropertyHolder propertyHolder = info.createPropertyHolder();
-		Assert.assertNotNull("propertyHolder should not be null", propertyHolder);
-		Assert.assertEquals("propertyHolder's propertyName should be", "isEnabled", propertyHolder.getPropertyName());
+		Assert.assertEquals("propertyType should be", Boolean.class, info.getPropertyType());
 	}
 
 	@Test

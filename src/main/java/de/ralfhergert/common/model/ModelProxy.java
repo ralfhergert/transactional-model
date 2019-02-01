@@ -5,12 +5,15 @@ import de.ralfhergert.common.model.context.Context;
 import de.ralfhergert.common.model.event.ModelChangeEvent;
 import de.ralfhergert.common.model.event.ModelChangeEventListener;
 import de.ralfhergert.common.model.meta.MethodInfo;
+import de.ralfhergert.common.model.meta.ModelClassInfo;
 import de.ralfhergert.common.model.property.ListPropertyHolder;
 import de.ralfhergert.common.model.property.PropertyHolder;
+import de.ralfhergert.common.model.property.PropertyHolderFactory;
 import de.ralfhergert.common.model.property.ValuePropertyHolder;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -39,32 +42,14 @@ public class ModelProxy implements Model, InvocationHandler {
 	/**
 	 * This constructor will analyze the given typeClass
 	 */
-	public ModelProxy(Class<?> typeClass) {
-		if (typeClass == null) {
-			throw new IllegalArgumentException("typeClass must not be null");
+	public ModelProxy(ModelClassInfo modelClassInfo) {
+		if (modelClassInfo == null) {
+			throw new IllegalArgumentException("modelClassInfo must not be null");
 		}
-		for (Method method : typeClass.getMethods()) {
-			if (supportedDelegationMethods.contains(method)) {
-				continue;
-			}
-			final MethodInfo methodInfo = MethodInfo.analyze(method);
-			if (methodInfo == null || methodInfo.getMethodType() == MethodInfo.MethodType.IGNORED) {
-				continue;
-			}
-			methodPropertyLookupMap.put(method, methodInfo);
-
-			final String propertyName = methodInfo.getPropertyName();
-			final PropertyHolder propertyHolder = methodInfo.createPropertyHolder();
-			if (propertyHolder == null) {
-				continue;
-			}
-			if (properties.containsKey(propertyName)) {
-				if (!properties.get(propertyName).equals(propertyHolder)) {
-					throw new IllegalArgumentException("type mismatch on property named '" + propertyName + "' detected on method '" + method.getName() + "'");
-				}
-			} else {
-				properties.put(propertyName, propertyHolder);
-			}
+		methodPropertyLookupMap.putAll(modelClassInfo.getPropertyMethods());
+		// create all necessary propertyHandlers.
+		for (Map.Entry<String,Type> propertyEntry : modelClassInfo.getPropertyTypes().entrySet()) {
+			properties.put(propertyEntry.getKey(), PropertyHolderFactory.createPropertyFor(propertyEntry.getKey(), propertyEntry.getValue()));
 		}
 	}
 
